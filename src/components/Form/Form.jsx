@@ -1,11 +1,17 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import initialState from './InitialState';
 import styles from './form.module.css';
 import { addContact } from 'redux/contacts/contactsSlice';
+import { fetchAllContacts } from 'redux/contacts/contactsOperations';
 
 export const Form = () => {
   const contacts = useSelector(store => store.contacts);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchAllContacts());
+  }, []);
 
   const handleChange = event => {
     initialState[event.target.name] = event.target.value;
