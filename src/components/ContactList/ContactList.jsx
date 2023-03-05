@@ -1,11 +1,17 @@
-import { useSelector } from 'react-redux';
-
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchAllContacts } from 'redux/contacts/contactsOperations';
 import ContactItem from './ContactItem/ContactItem';
 import styles from './contactList.module.css';
 
 const ContactList = () => {
-  const contacts = useSelector(store => store.contacts);
+  const contacts = useSelector(store => store.contacts.items);
   const filter = useSelector(store => store.filter);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchAllContacts());
+  }, [dispatch]);
 
   const filterContacts = () => {
     return contacts.filter(contact =>
@@ -17,8 +23,8 @@ const ContactList = () => {
 
   return (
     <ol className={styles.list}>
-      {listContactsByFilter.map(({ id, name, number }) => {
-        return <ContactItem key={id} name={name} number={number} nameId={id} />;
+      {listContactsByFilter.map(({ id, name, phone }) => {
+        return <ContactItem key={id} name={name} phone={phone} nameId={id} />;
       })}
     </ol>
   );

@@ -1,6 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
-// import { nanoid } from 'nanoid';
-import * as actions from './contactsActions';
+
+import {
+  fetchAllContactsLoading,
+  fetchAllContactsSuccsess,
+  fetchAllContactsError,
+  fetchAddContactLoading,
+  fetchAddContactSuccsess,
+  fetchAddContactError,
+  fetchDeleteContactLoading,
+  fetchDeleteContactSuccsess,
+  fetchDeleteContactError,
+} from './contactsActions';
 
 const initialState = {
   items: [],
@@ -11,32 +21,45 @@ const initialState = {
 const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
-  reducers: {
-    [actions.fetchAllContactsLoading]: store => {
+  extraReducers: {
+    [fetchAllContactsLoading]: store => {
       store.loading = true;
     },
-    [actions.fetchAllContactsSuccsess]: (store, { payload }) => {
+    [fetchAllContactsSuccsess]: (store, { payload }) => {
+      console.log(payload);
       store.loading = false;
       store.items = payload;
     },
-    [actions.fetchAllContactsError]: (store, { payload }) => {
+    [fetchAllContactsError]: (store, { payload }) => {
       store.loading = false;
       store.error = payload;
     },
 
-    [actions.fetchAddContactsLoading]: store => {
+    [fetchAddContactLoading]: store => {
       store.loading = true;
     },
-    [actions.fetchAddContactsSuccsess]: (store, { payload }) => {
+    [fetchAddContactSuccsess]: (store, { payload }) => {
       store.loading = false;
       store.items.push(payload);
     },
-    [actions.fetchAddContactsError]: (store, { payload }) => {
+    [fetchAddContactError]: (store, { payload }) => {
+      store.loading = false;
+      store.error = payload;
+    },
+
+    [fetchDeleteContactLoading]: store => {
+      store.loading = true;
+    },
+    [fetchDeleteContactSuccsess]: (store, { payload }) => {
+      store.loading = false;
+      const index = store.items.findIndex(item => item.id === payload);
+      store.items.splice(index, 1);
+    },
+    [fetchDeleteContactError]: (store, { payload }) => {
       store.loading = false;
       store.error = payload;
     },
   },
 });
-
 export const { addContact, deleteContact } = contactsSlice.actions;
 export default contactsSlice.reducer;

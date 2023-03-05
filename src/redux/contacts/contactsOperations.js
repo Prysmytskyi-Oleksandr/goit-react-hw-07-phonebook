@@ -1,4 +1,4 @@
-import * as api from '../../servises/contacrsAPI';
+import * as api from '../../servises/contactsAPI';
 
 import * as actions from './contactsActions';
 
@@ -18,15 +18,25 @@ export const fetchAllContacts = () => {
 export const fetchAddContact = data => {
   const func = async dispatch => {
     try {
-      dispatch(actions.fetchAddContactsLoading());
+      dispatch(actions.fetchAddContactLoading());
       const result = await api.addContact(data);
-      dispatch(actions.fetchAddContactsSuccsess(result));
+      dispatch(actions.fetchAddContactSuccsess(result));
     } catch ({ response }) {
-      dispatch(actions.fetchAddContactsError(response.data.message));
+      dispatch(actions.fetchAddContactError(response.data.message));
     }
-    };
-     return func;
+  };
+  return func;
 };
 
-
-export  const fetchDeleteContact
+export const fetchDeleteContact = id => {
+  const func = async dispatch => {
+    try {
+      dispatch(actions.fetchDeleteContactLoading());
+      await api.deleteContact(id);
+      dispatch(actions.fetchDeleteContactSuccsess(id));
+    } catch ({ response }) {
+      dispatch(actions.fetchDeleteContactError(response.data.message));
+    }
+  };
+  return func;
+};

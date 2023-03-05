@@ -6,6 +6,7 @@ const contactsInstance = axios.create({
 
 export const getAllContacts = async () => {
   const { data } = await contactsInstance.get('/');
+  console.log(data);
   return data;
 };
 
@@ -15,6 +16,6 @@ export const addContact = async data => {
 };
 
 export const deleteContact = async id => {
-  const { data } = await contactsInstance.delete('/$(id)');
+  const { data } = await contactsInstance.delete(`/${id}`);
   return data;
 };
