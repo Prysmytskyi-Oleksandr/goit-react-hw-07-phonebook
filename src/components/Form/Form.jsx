@@ -10,16 +10,19 @@ export const Form = () => {
 
   const handleChange = event => {
     initialState[event.target.name] = event.target.value;
+    console.log(event.target.value);
     return;
   };
 
   const onAddContact = data => {
-    if (contacts.find(contact => contact.name === data.name)) {
+    const name = data.name;
+    if (contacts.find(contact => contact.name === name)) {
       alert(`${data.name} is already in contacts`);
       return;
     }
 
-    const action = fetchAddContact(data.name, data.phone);
+    const phone = data.number;
+    const action = fetchAddContact({ name, phone });
     dispatch(action);
   };
 
