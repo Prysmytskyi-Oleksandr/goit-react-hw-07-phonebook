@@ -1,42 +1,39 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import * as api from '../../servises/contactsAPI';
 
-import * as actions from './contactsActions';
-
-export const fetchAllContacts = () => {
-  const func = async dispatch => {
+export const fetchAllContacts = createAsyncThunk(
+  'contacts/fetchAll',
+  async (_, thunkAPI) => {
     try {
-      dispatch(actions.fetchAllContactsLoading());
       const data = await api.getAllContacts();
-      dispatch(actions.fetchAllContactsSuccsess(data));
+      return data;
     } catch ({ response }) {
-      dispatch(actions.fetchAllContactsError(response.data.message));
+      return thunkAPI.rejectWithValue(response.data);
     }
-  };
-  return func;
-};
+  }
+);
 
-export const fetchAddContact = data => {
-  const func = async dispatch => {
+export const fetchAddContact = createAsyncThunk(
+  'contacts/add',
+  async (data, { rejectWithValue }) => {
     try {
-      dispatch(actions.fetchAddContactLoading());
       const result = await api.addContact(data);
-      dispatch(actions.fetchAddContactSuccsess(result));
+      return result;
     } catch ({ response }) {
-      dispatch(actions.fetchAddContactError(response.data.message));
+      return rejectWithValue(response.data);
     }
-  };
-  return func;
-};
+  }
+);
 
-export const fetchDeleteContact = id => {
-  const func = async dispatch => {
+export const fetchDeleteContact = createAsyncThunk(
+  'contacts/delete',
+  async (id, { rejectWithValue }) => {
     try {
-      dispatch(actions.fetchDeleteContactLoading());
       await api.deleteContact(id);
-      dispatch(actions.fetchDeleteContactSuccsess(id));
+      return id;
     } catch ({ response }) {
-      dispatch(actions.fetchDeleteContactError(response.data.message));
+      return rejectWithValue(response.data);
     }
-  };
-  return func;
-};
+  }
+);
